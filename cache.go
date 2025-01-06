@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"sync"
 	"time"
 )
@@ -46,40 +45,4 @@ func (c *Cache[T]) Clear() {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	c.data = make(map[string]T)
-}
-
-func demo() {
-	// Create a new cache for string values with a TTL of 5 seconds
-	cache := NewCache[string](5 * time.Second)
-
-	// Add some data to the cache
-	cache.Set("user:123", "John Doe")
-	cache.Set("user:456", "Jane Smith")
-
-	// Retrieve data from the cache
-	if value, found := cache.Get("user:123"); found {
-		fmt.Println("Cache hit for user:123:", value)
-	} else {
-		fmt.Println("Cache miss for user:123")
-	}
-
-	// Delete a key from the cache
-	cache.Delete("user:456")
-
-	// Check cache after deletion
-	if value, found := cache.Get("user:456"); found {
-		fmt.Println("Cache hit for user:456:", value)
-	} else {
-		fmt.Println("Cache miss for user:456")
-	}
-
-	// Wait to see if the TTL expires (example purposes)
-	time.Sleep(6 * time.Second)
-
-	// Check cache after TTL expiration
-	if value, found := cache.Get("user:123"); found {
-		fmt.Println("Cache hit for user:123:", value)
-	} else {
-		fmt.Println("Cache miss for user:123")
-	}
 }
